@@ -1,49 +1,71 @@
-import React , { useContext, useEffect,useState }from 'react'
+import React, { useState,useContext,useEffect } from 'react'
+import Sidebar from '../sidebar/Sidebar'
+import Createtask from '../tasks/Taskpopup'
+import { LuPlus } from "react-icons/lu";
+import { Link } from 'react-router-dom';
+import Taskpopup from '../tasks/Taskpopup';
 import { UserContext }  from '../mainpage/UserContext';
-import { Link ,useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
 const Dashboard = () => {
-  const { userName } = useContext(UserContext);
-  const [auth, setAuth] = useState(false);
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
-  axios.defaults.withCredentials = true;
+  const { userId } = useContext(UserContext);
+  const [tasks, setTasks] = useState([]);
+  const [error, setError] = useState(null);
 
-  useEffect(()=>{
-    axios.get('http://localhost:3001')
-             .then(res => {
-              if(res.data.status === 'success'){
-                 setAuth(true);
-                 
-              }else{
-                setAuth(false);
-                setMessage(res.data.error());
-                
-              }
-             })
-             .then(err=>console.log(err)
-            );
-  },[])
+  const [showcreate,setShowcreate]=useState(false)
+  const handleOnClose=()=>setShowcreate(false)
 
-   const handlelogout=()=>{
-    axios.get('http://localhost:3001/logout')
-          .then(res => {
-            location.reload(true);
-            
-          }).catch(err => console.log(err));
-          navigate('/login');
-   }
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/tasks/${userId}`);
+        console.log('Fetch Tasks Response:', response.data); // Add logging
+        setTasks(response.data);
+      } catch (err) {
+        console.log('Error fetching tasks:', err); // Add error logging
+        setError('Failed to fetch tasks');
+      }
+    };
+
+    fetchTasks();
+  }, [userId]);
+
+
   return (
     <>
-    <div>
-        <h1>Welcome to the Home Page</h1>
-        {userName && <p>Hello, {userName}!</p>}  {/* Display the user's name */}
+    <div className='flex font-bold'>
+        <Sidebar/>
+         <div className='ml-20 mt-20 text-5xl'>
+          HOME
+          
+          <div>
+      <h1>Your Tasks</h1>
+      {error && <p className='text-red-500'>{error}</p>}
+      <ul>
+        {tasks.length > 0 ? (
+          tasks.map(task => (
+            <li key={task.id}>
+              <h2>{task.title}</h2>
+              <p>{task.description}</p>
+            </li>
+          ))
+        ) : (
+          <p>No tasks available</p>
+        )}
+      </ul>
+    </div>
+          <div className='relative '>
+            <button className='absolute -bottom-[470px] -right-[700px] text-5xl' onClick={()=>setShowcreate(true)}>
+            <LuPlus className='bg-orange-100 rounded-full border-black border-2' />
+            </button>
+          </div>
+         </div>
 
-        <button className='border-2 border-black' onClick={handlelogout}>Logout</button>
+       
       </div>
+       <Taskpopup onClose={handleOnClose} visible={showcreate} />
     </>
   )
 }
 
-export default Dashboard
+export default Dashboard 

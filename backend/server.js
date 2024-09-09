@@ -1,3 +1,4 @@
+
 import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
@@ -29,6 +30,7 @@ db.connect((err) => {
     console.log('Connected to the database.');
 });
 //register api
+
 app.post('/signup', (req, res) => {
     const sql = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
@@ -42,6 +44,7 @@ app.post('/signup', (req, res) => {
         });
     });
 });
+
 //login api
 app.post('/login', (req, res) => {
     const sql = 'SELECT * FROM users WHERE email = ?';
@@ -56,7 +59,7 @@ app.post('/login', (req, res) => {
             const name=result[0].name;
             const token = jwt.sign({ name }, 'secret', {expiresIn: '1d',})
             res.cookie('jwt', token)
-            return res.json({ status: 'success', name: result[0].name });
+            return res.json({ status: 'success', name: result[0].name,id:result[0].id,email:result[0].email});
           } else {
             return res.json({ error: 'Incorrect password' });
           }
@@ -90,6 +93,33 @@ app.post('/login', (req, res) => {
     res.clearCookie('jwt');
     return res.json({ status: 'success' });
   })
+//create task api
+  app.post('/createtask', (req, res) => {
+    const { title, description, userId } = req.body;
+
+    const sql = 'INSERT INTO tasks (title, description, userid) VALUES (?, ?, ?)';
+    const values = [title, description, userId];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            return res.json({ error: 'Database error when creating task' });
+        }
+        res.json({ status: 'success', taskId: result.insertId ,title:result.title,description:result.description });
+    });
+});
+//fetching data
+app.get('/tasks/:userId', (req, res) => {
+  const { userId } = req.params;
+  const sql = 'SELECT * FROM tasks WHERE userid = ?';
+
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      return res.json({ error: 'Database error when fetching tasks' });
+    }
+    res.json(result);
+  });
+});
+
 app.listen(3001,()=>{
     console.log('is done on port 3001');
-})
+})                  

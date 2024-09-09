@@ -12,7 +12,9 @@ const Login = () => {
     password: '',
   })
   const { setUserName } = useContext(UserContext);  
-  
+  const {setUserId}=useContext(UserContext);
+  const {setUseremail}=useContext(UserContext);
+
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
   const handleSubmit = (e) => {
@@ -21,6 +23,8 @@ const Login = () => {
              .then(res => {
               if(res.data.status === 'success'){
                 setUserName(res.data.name);
+                setUserId(res.data.id);
+                setUseremail(res.data.email);
                  navigate('/dashboard');
               }else{
                 alert(res.data.error);
@@ -30,7 +34,7 @@ const Login = () => {
     }
   return (
     <>
-        <div  className=''>
+        <div  className=' '>
       <div className='bg-orange-100  '>
         <div className='flex'>
         <img src={pic1} className='w-4/6 h-3/5 -mt-12 ' />
@@ -64,10 +68,10 @@ const Login = () => {
               name='Password'/>
             </div>
             </div>
-            <div class="items-center -ml-48 mt-5">
+            <div className="items-center -ml-48 mt-5">
                 
                  <div className="text-center ">
-                <button type="submit" class="shadow mt-3 ml-10 bg-orange-200 hover:bg-orange-300 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-8 rounded-full" >
+                <button type="submit" className="shadow mt-3 ml-10 bg-orange-200 hover:bg-orange-300 focus:shadow-outline focus:outline-none text-black font-bold py-2 px-8 rounded-full" >
                   Login
                   </button>
                 </div>
