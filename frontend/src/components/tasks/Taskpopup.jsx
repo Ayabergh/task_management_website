@@ -1,16 +1,14 @@
-import React, { useState, useContext  } from 'react';
+import React, { useState, useContext } from 'react';
 import { UserContext } from '../mainpage/UserContext';
 import axios from 'axios';
 
-const Taskpopup = ({ visible, onClose }) => {
+const Taskpopup = ({ visible, onClose, onTaskCreated }) => {
   const { userId } = useContext(UserContext);
   const [values, setValues] = useState({
     title: '',
     description: '',
   });
 
-  const {settasktitle}=useContext(UserContext);
-  const {settaskdescription}=useContext(UserContext);
   if (!visible) return null;
 
   const handleOnClose = () => {
@@ -25,32 +23,31 @@ const Taskpopup = ({ visible, onClose }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const taskData = {
       ...values,
       userId: userId, // add the userId here
     };
-    //endpoint connection 
-    axios.post('http://localhost:3001/createtask', taskData)
-      .then(res => {
-        if (res.data.status === 'success') {
-          settasktitle(res.data.title);
-          settaskdescription(res.data.description);
-          navigate('/dashboard');
-        }
-      })
-      .catch(err => console.log(err));
 
-
-
-    // Handle task creation logic here
-    console.log('Task Created:', values);
-    setValues({
-      title: '',
-      description: '',
-    });
-    onClose();
+    try {
+      const res = await axios.post('http://localhost:3001/createtask', taskData);
+      if (res.data.status === 'success') {
+        const newTask = {
+          id: res.data.taskId,
+          title: values.title,
+          description: values.description,
+        };
+        onTaskCreated(newTask); // Call the function to add the new task to the dashboard
+        setValues({
+          title: '',
+          description: '',
+        });
+        onClose();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -120,4 +117,5 @@ const Taskpopup = ({ visible, onClose }) => {
     </div>
   );
 };
+
 export default Taskpopup;

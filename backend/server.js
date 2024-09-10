@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors(
 {
     origin: ["http://localhost:5173"],
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST','PUT','DELETE'],
     credentials: true,
 }
 ));
@@ -117,6 +117,34 @@ app.get('/tasks/:userId', (req, res) => {
       return res.json({ error: 'Database error when fetching tasks' });
     }
     res.json(result);
+  });
+});
+ 
+app.put('/updatetask/:taskid', (req, res) => {
+  const { taskid } = req.params;
+  const { title, description } = req.body;
+
+  const sql = 'UPDATE tasks SET title = ?, description = ? WHERE id = ?';
+  const values = [title, description, taskid];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      return res.json({ error: 'Database error when updating task' });
+    }
+    res.json({ status: 'success' });
+  });
+});
+//delete api
+app.delete('/deletetask/:taskid', (req, res) => {
+  const { taskid } = req.params;
+
+  const sql = 'DELETE FROM tasks WHERE id = ?';
+  
+  db.query(sql, [taskid], (err, result) => {
+    if (err) {
+      return res.json({ error: 'Database error when deleting task' });
+    }
+    res.json({ status: 'success' });
   });
 });
 
