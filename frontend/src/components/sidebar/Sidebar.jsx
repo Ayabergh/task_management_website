@@ -17,7 +17,7 @@ const Sidebar = () => {
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
-
+//This endpoint is used to read the user data .
     useEffect(() => {
         axios.get('http://localhost:3001')
             .then(res => {
@@ -30,7 +30,7 @@ const Sidebar = () => {
             })
             .catch(err => console.log(err));
     }, []);
-
+//this endpoint is to logout
     const handleLogout = () => {
         axios.get('http://localhost:3001/logout')
             .then(res => {

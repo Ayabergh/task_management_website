@@ -53,7 +53,7 @@ const Taskpopup = ({ visible, onClose, onTaskCreated }) => {
   return (
     <div
       onClick={handleOnClose}
-      className='fixed inset-0 bg-zinc-400 bg-opacity-30 backdrop-blur-sm flex justify-center items-center'
+      className='fixed inset-0 bg-zinc-400 bg-opacity-30 backdrop-blur-sm flex justify-center items-center font-jost'
     >
       <div
         className='relative bg-white w-3/5 h-auto p-5 rounded-3xl'

@@ -17,6 +17,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
+  //the endpoint to login 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post('http://localhost:3001/login',values)
@@ -31,10 +32,10 @@ const Login = () => {
               }
              })
              .catch(err => console.log(err));
-    }
+    };
   return (
     <>
-        <div  className=' '>
+        <div  className=' font-jost '>
       <div className='bg-orange-100  '>
         <div className='flex'>
         <img src={pic1} className='w-4/6 h-3/5 -mt-12 ' />

@@ -13,6 +13,7 @@ const Taskdetailpopup = ({ task, onClose, onUpdate, onDelete }) => {
   }, [task]);
 
   if (!task) return null;
+  //the endpoint for delete
   const handleDelete = () => {
     axios.delete(`http://localhost:3001/deletetask/${task.id}`)
       .then(res => {
@@ -34,7 +35,7 @@ const Taskdetailpopup = ({ task, onClose, onUpdate, onDelete }) => {
       [name]: value,
     });
   };
-
+// the endpoint for update
   const handleUpdate = (e) => {
     e.preventDefault();
     axios.put(`http://localhost:3001/updatetask/${task.id}`, values)
@@ -48,7 +49,7 @@ const Taskdetailpopup = ({ task, onClose, onUpdate, onDelete }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 font-jost ">
       <div className="bg-white p-6 rounded-lg shadow-md relative max-w-lg w-full">
         <button 
           className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"

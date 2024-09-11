@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Mainpage = () => {
   return (
     <>
-    <div  className=''>
+    <div  className='font-jost'>
       <div className='bg-orange-100  '>
           <div className='flex'>
           <img src={pic1} className='w-4/6 h-3/5 -mt-12 ' />
