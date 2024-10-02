@@ -1,4 +1,6 @@
 # Task Management System
+![signup_page](https://github.com/user-attachments/assets/c4a4aea2-3a6c-4910-b499-3b0a859ad55c)
+
 ## Overview
 This is a simple Task Management System built using React and Tailwind CSS for the frontend, and a MySQL database for the backend. The system allows users to create, update, delete, and view tasks. It is designed to help users efficiently manage their daily tasks.
 
